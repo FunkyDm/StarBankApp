@@ -1,4 +1,4 @@
-package pro.sky.StarBankApp.StarBankApp.ruleset;
+package ruleset;
 
 import pro.sky.StarBankApp.StarBankApp.model.Recommendation;
 
