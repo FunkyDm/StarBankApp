@@ -15,13 +15,35 @@ public class RecommendationsRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public int getRandomTransactionAmount(UUID user){
+    public int getRandomTransactionAmount(UUID userId, String productType){
         Integer result = jdbcTemplate.queryForObject(
-                "SELECT amount FROM transactions t WHERE t.user_id = ? LIMIT 1",
+                "SELECT COUNT(t.AMOUNT) " +
+                        "FROM transactions t " +
+                        "JOIN products p ON t.product_id = p.id " +
+                        "WHERE t.user_id = ? " +
+                        "  AND p.type = ?;",
                 Integer.class,
-                user);
+                userId,
+                productType);
         return result != null ? result : 0;
     }
 
+    public long getTransactionAmount(UUID userId, String productType, String transactionType) {
+        Long result = jdbcTemplate.queryForObject(
+                "SELECT SUM(t.AMOUNT) " +
+                        "FROM transactions t " +
+                        "JOIN products p ON t.product_id = p.id " +
+                        "WHERE t.user_id = ? " +
+                        "AND p.type = ? " +
+                        "AND t.type = ?;",
+                Long.class,
+                userId,
+                productType,
+                transactionType);
+        return result != null ? result : 0L;
+    }
 
+    public int getTransactionCount(UUID userId, String credit) {
+        return 0;
+    }
 }
