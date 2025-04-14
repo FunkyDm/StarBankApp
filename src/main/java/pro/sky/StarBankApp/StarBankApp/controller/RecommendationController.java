@@ -1,4 +1,4 @@
-package pro.sky.StarBankApp.StarBankApp.Controller;
+package pro.sky.StarBankApp.StarBankApp.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
