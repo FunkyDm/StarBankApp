@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Repository
 public class RecommendationsRepository {
@@ -22,6 +23,8 @@ public class RecommendationsRepository {
                 user);
         return result != null ? result : 0;
     }
+
+
 
 
 }

@@ -9,6 +9,7 @@ import pro.sky.StarBankApp.StarBankApp.repository.ProductRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -26,7 +27,7 @@ public class RecommendationService {
     }
 
     public RecommendationDTO getRecommendations(UUID userId) {
-        List<ProductRecommendation> recommendations = rules.stream()
+        List<Optional<Object>> recommendations = rules.stream()
                 .map(rule -> rule.check(userId))
                 .filter(Objects::nonNull)
                 .toList();

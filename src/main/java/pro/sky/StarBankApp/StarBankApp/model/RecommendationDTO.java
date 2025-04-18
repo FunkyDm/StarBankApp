@@ -4,5 +4,5 @@ import java.util.List;
 
 public record RecommendationDTO(
         String userId,
-        List<ProductRecommendation> recommendations
+        List<java.util.Optional<Object>> recommendations
 ) {}
