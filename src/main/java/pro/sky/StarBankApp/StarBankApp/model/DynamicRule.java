@@ -1,8 +1,8 @@
 package pro.sky.StarBankApp.StarBankApp.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
+// import org.springframework.data.annotation.Id;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,9 @@ public class DynamicRule {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "rule_id")
     private List<RuleCondition> conditions = new ArrayList<>();
+
+    public DynamicRule() {
+    }
 
     public DynamicRule(UUID id, String productName, UUID productId, String productText, List<RuleCondition> conditions) {
         this.id = id;

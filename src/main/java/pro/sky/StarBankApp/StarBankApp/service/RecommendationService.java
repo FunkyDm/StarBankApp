@@ -1,5 +1,6 @@
 package pro.sky.StarBankApp.StarBankApp.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.StarBankApp.StarBankApp.RecommendationRule;
 import pro.sky.StarBankApp.StarBankApp.model.ProductRecommendation;
@@ -17,6 +18,7 @@ public class RecommendationService {
     private final ProductRepository productRepository;
     private final List<RecommendationRule> staticRules;
     private final DynamicRuleService dynamicRuleService;
+
 
     public RecommendationService(ProductRepository productRepository,
                                  List<RecommendationRule> staticRules,

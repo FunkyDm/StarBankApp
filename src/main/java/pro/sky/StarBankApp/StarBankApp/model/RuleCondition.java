@@ -1,9 +1,7 @@
 package pro.sky.StarBankApp.StarBankApp.model;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
+// import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +18,13 @@ public class RuleCondition {
 
     @ElementCollection
     @CollectionTable(name = "rule_arguments", joinColumns = @JoinColumn(name = "condition_id"))
-    @Column("argument")
+    @Column(name = "argument")
     private List<String> arguments = new ArrayList<>();
 
     private boolean negate;
+
+    public RuleCondition() {
+    }
 
     public RuleCondition(UUID id, String queryType, List<String> arguments, boolean negate) {
         this.id = id;

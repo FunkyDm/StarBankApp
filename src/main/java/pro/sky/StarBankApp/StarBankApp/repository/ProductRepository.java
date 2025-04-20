@@ -20,7 +20,6 @@ public class ProductRepository {
     private final Cache<CacheKey, Boolean> activeUserCache;
     private final Cache<CacheKey, BigDecimal> sumCache;
 
-
     public ProductRepository(@Qualifier("jdbcTemplateH2") JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.userProductCache = Caffeine.newBuilder()
@@ -86,11 +85,11 @@ public class ProductRepository {
         CacheKey key = new CacheKey(userId, productType);
         return activeUserCache.get(key, k -> {
             String sql = """
-                SELECT COUNT(*) >= 5 
-                FROM transactions t
-                JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ?
-                """;
+                    SELECT COUNT(*) >= 5 
+                    FROM transactions t
+                    JOIN products p ON t.product_id = p.id
+                    WHERE t.user_id = ? AND p.type = ?
+                    """;
             return Boolean.TRUE.equals(jdbcTemplate.queryForObject(
                     sql, Boolean.class, userId.toString(), productType));
         });
@@ -102,11 +101,11 @@ public class ProductRepository {
         CacheKey key = new CacheKey(userId, productType, transactionType);
         BigDecimal sum = sumCache.get(key, k -> {
             String sql = """
-                SELECT COALESCE(SUM(t.amount), 0)
-                FROM transactions t
-                JOIN products p ON t.product_id = p.id
-                WHERE t.user_id = ? AND p.type = ? AND t.type = ?
-                """;
+                    SELECT COALESCE(SUM(t.amount), 0)
+                    FROM transactions t
+                    JOIN products p ON t.product_id = p.id
+                    WHERE t.user_id = ? AND p.type = ? AND t.type = ?
+                    """;
             return jdbcTemplate.queryForObject(
                     sql, BigDecimal.class, userId.toString(), productType, transactionType);
         });
@@ -140,14 +139,15 @@ public class ProductRepository {
 
     private BigDecimal getTransactionSum(UUID userId, String productType, String transactionType) {
         String sql = """
-            SELECT COALESCE(SUM(t.amount), 0)
-            FROM transactions t
-            JOIN products p ON t.product_id = p.id
-            WHERE t.user_id = ? AND p.type = ? AND t.type = ?
-            """;
+                SELECT COALESCE(SUM(t.amount), 0)
+                FROM transactions t
+                JOIN products p ON t.product_id = p.id
+                WHERE t.user_id = ? AND p.type = ? AND t.type = ?
+                """;
         return jdbcTemplate.queryForObject(
                 sql, BigDecimal.class, userId.toString(), productType, transactionType);
     }
 
-    private record CacheKey(UUID userId, String... args) {}
+    private record CacheKey(UUID userId, String... args) {
+    }
 }
