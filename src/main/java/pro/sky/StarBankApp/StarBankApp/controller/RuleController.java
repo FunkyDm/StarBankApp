@@ -2,7 +2,7 @@ package pro.sky.StarBankApp.StarBankApp.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.StarBankApp.StarBankApp.model.DynamicRule;
+import pro.sky.StarBankApp.StarBankApp.model.dinamicRules.DynamicRule;
 import pro.sky.StarBankApp.StarBankApp.service.DynamicRuleService;
 
 import java.util.List;

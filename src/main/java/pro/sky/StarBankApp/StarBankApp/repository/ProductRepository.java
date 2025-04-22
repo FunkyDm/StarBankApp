@@ -20,7 +20,7 @@ public class ProductRepository {
     private final Cache<CacheKey, Boolean> activeUserCache;
     private final Cache<CacheKey, BigDecimal> sumCache;
 
-    public ProductRepository(@Qualifier("jdbcTemplateH2") JdbcTemplate jdbcTemplate) {
+    public ProductRepository(@Qualifier("recommendationsJdbcTemplate") JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.userProductCache = Caffeine.newBuilder()
                 .maximumSize(10_000)

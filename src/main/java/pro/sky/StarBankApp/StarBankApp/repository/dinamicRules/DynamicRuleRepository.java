@@ -1,7 +1,7 @@
-package pro.sky.StarBankApp.StarBankApp.repository;
+package pro.sky.StarBankApp.StarBankApp.repository.dinamicRules;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pro.sky.StarBankApp.StarBankApp.model.DynamicRule;
+import pro.sky.StarBankApp.StarBankApp.model.dinamicRules.DynamicRule;
 
 import java.util.UUID;
 

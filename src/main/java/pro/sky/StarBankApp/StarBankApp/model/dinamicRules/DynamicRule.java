@@ -1,4 +1,4 @@
-package pro.sky.StarBankApp.StarBankApp.model;
+package pro.sky.StarBankApp.StarBankApp.model.dinamicRules;
 
 import jakarta.persistence.*;
 // import org.springframework.data.annotation.Id;
