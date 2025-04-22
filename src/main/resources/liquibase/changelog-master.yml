@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: liquibase/changes/dynamic_rules.sql
+  - include:
+      file: liquibase/changes/rule_conditions.sql
+  - include:
+      file: liquibase/changes/rule_arguments.sql

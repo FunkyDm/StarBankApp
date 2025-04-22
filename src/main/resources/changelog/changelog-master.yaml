@@ -1,7 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: changelog/changes/dynamic_rules.sql
-  - include:
-      file: changelog/changes/rule_conditions.sql
-  - include:
-      file: changelog/changes/rule_arguments.sql

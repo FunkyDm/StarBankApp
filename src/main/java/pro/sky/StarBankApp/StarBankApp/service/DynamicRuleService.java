@@ -1,9 +1,9 @@
 package pro.sky.StarBankApp.StarBankApp.service;
 
 import org.springframework.stereotype.Service;
-import pro.sky.StarBankApp.StarBankApp.model.DynamicRule;
-import pro.sky.StarBankApp.StarBankApp.model.RuleCondition;
-import pro.sky.StarBankApp.StarBankApp.repository.DynamicRuleRepository;
+import pro.sky.StarBankApp.StarBankApp.model.dinamicRules.DynamicRule;
+import pro.sky.StarBankApp.StarBankApp.model.dinamicRules.RuleCondition;
+import pro.sky.StarBankApp.StarBankApp.repository.dinamicRules.DynamicRuleRepository;
 import pro.sky.StarBankApp.StarBankApp.repository.ProductRepository;
 
 import java.math.BigDecimal;
