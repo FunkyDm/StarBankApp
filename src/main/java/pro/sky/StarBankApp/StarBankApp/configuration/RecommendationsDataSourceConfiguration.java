@@ -30,10 +30,11 @@ public class RecommendationsDataSourceConfiguration {
         return dataSource;
     }
 
-    @Bean(name = "recommendationsJdbcTemplate")
-    public JdbcTemplate recommendationsJdbcTemplate(
-            @Qualifier("recommendationsDataSource") DataSource dataSource
-    ) {
-        return new JdbcTemplate(dataSource);
-    }
+    @Primary
+        @Bean(name = "recommendationsJdbcTemplate")
+            public JdbcTemplate recommendationsJdbcTemplate(
+                    @Qualifier("recommendationsDataSource") DataSource dataSource
+            ) {
+                return new JdbcTemplate(dataSource);
+            }
 }
