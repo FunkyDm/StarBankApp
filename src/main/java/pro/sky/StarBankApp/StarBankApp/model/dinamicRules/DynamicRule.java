@@ -1,7 +1,9 @@
 package pro.sky.StarBankApp.StarBankApp.model.dinamicRules;
 
 import jakarta.persistence.*;
+import org.springframework.context.annotation.Profile;
 
+@Profile("!disabledModule")
 @Entity
 @Table(name = "dynamic_rules")
 public class DynamicRule {

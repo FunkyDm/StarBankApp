@@ -1,3 +1,5 @@
 databaseChangeLog:
-  - include:
-      file:changes/create-dinamic-rules-table.sql
+  - changeSet:
+      id: 1
+      author: Dm
+      changes: []

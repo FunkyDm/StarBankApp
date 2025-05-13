@@ -15,12 +15,6 @@ import javax.sql.DataSource;
 
 @Configuration
 public class RecommendationsDataSourceConfiguration {
-    @Primary
-    @Bean(name = "dynamicRulesDataSource")
-    public DataSource dynamicRulesDataSource(DataSourceProperties properties) {
-        return properties.initializeDataSourceBuilder().build();
-    }
-
     @Bean(name = "recommendationsDataSource")
     public DataSource recommendationsDataSource(@Value("${application.recommendations-db.url}") String recommendationsUrl) {
         var dataSource = new HikariDataSource();
@@ -30,11 +24,18 @@ public class RecommendationsDataSourceConfiguration {
         return dataSource;
     }
 
-    @Primary
-        @Bean(name = "recommendationsJdbcTemplate")
-            public JdbcTemplate recommendationsJdbcTemplate(
-                    @Qualifier("recommendationsDataSource") DataSource dataSource
-            ) {
-                return new JdbcTemplate(dataSource);
-            }
+    @Bean(name = "recommendationsJdbcTemplate")
+    public JdbcTemplate recommendationsJdbcTemplate(
+            @Qualifier("recommendationsDataSource") DataSource dataSource
+    ) {
+        return new JdbcTemplate(dataSource);
+    }
+
+//    @Primary
+//    @Bean(name = "dynamicRulesDataSource")
+//    public DataSource dynamicRulesDataSource(DataSourceProperties properties) {
+//        return properties.initializeDataSourceBuilder().build();
+
+//    }
+
 }
