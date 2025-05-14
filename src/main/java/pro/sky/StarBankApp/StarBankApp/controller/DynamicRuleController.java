@@ -1,10 +1,9 @@
 package pro.sky.StarBankApp.StarBankApp.controller;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pro.sky.StarBankApp.StarBankApp.model.dinamicRules.DynamicRule;
+import pro.sky.StarBankApp.StarBankApp.model.DynamicRule;
 import pro.sky.StarBankApp.StarBankApp.service.DynamicRuleService;
 
 import java.util.List;
@@ -31,9 +30,10 @@ public class DynamicRuleController {
         return ResponseEntity.ok(Map.of("data", ruleService.getAllRules()));
     }
 
-    @DeleteMapping("/{ruleId}")
-    public ResponseEntity<Void> deleteRule(@PathVariable UUID ruleId) {
-        ruleService.deleteRule(ruleId);
-        return ResponseEntity.noContent().build();
-    }
+//    @DeleteMapping("/{ruleId}")
+//    public ResponseEntity<Void> deleteRule(@PathVariable UUID ruleId) {
+//        ruleService.deleteRule(ruleId);
+//        return ResponseEntity.noContent().build();
+//    }
+
 }

@@ -15,13 +15,12 @@ public class RecommendationsRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public int getRandomTransactionAmount(UUID user){
+    public int getRandomTransactionAmount(UUID user) {
         Integer result = jdbcTemplate.queryForObject(
                 "SELECT amount FROM transactions t WHERE t.user_id = ? LIMIT 1",
                 Integer.class,
                 user);
         return result != null ? result : 0;
     }
-
 
 }

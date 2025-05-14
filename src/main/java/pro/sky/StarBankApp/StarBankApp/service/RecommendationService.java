@@ -1,52 +1,32 @@
 package pro.sky.StarBankApp.StarBankApp.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pro.sky.StarBankApp.StarBankApp.RecommendationRule;
-import pro.sky.StarBankApp.StarBankApp.model.ProductRecommendation;
-import pro.sky.StarBankApp.StarBankApp.model.RecommendationDTO;
-import pro.sky.StarBankApp.StarBankApp.repository.ProductRepository;
+import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
+import pro.sky.StarBankApp.StarBankApp.rules.RecommendationRuleSet;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
-
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RecommendationService {
-    private final ProductRepository productRepository;
-    private final List<RecommendationRule> staticRules;
-    private final DynamicRuleService dynamicRuleService;
+    private final List<RecommendationRuleSet> rules;
 
-
-    public RecommendationService(ProductRepository productRepository,
-                                 List<RecommendationRule> staticRules,
-                                 DynamicRuleService dynamicRuleService) {
-        this.productRepository = productRepository;
-        this.staticRules = staticRules;
-        this.dynamicRuleService = dynamicRuleService;
+    public RecommendationService(List<RecommendationRuleSet> rules) {
+        this.rules = rules;
     }
 
-    public RecommendationDTO getRecommendations(UUID userId) {
-        List<ProductRecommendation> recommendations = new ArrayList<>();
+    public RecommendationResponse getRecommendations(String userId) {
+        RecommendationResponse response = new RecommendationResponse();
 
-        // Check static rules
-        recommendations.addAll(staticRules.stream()
-                .map(rule -> rule.check(userId))
-                .filter(Objects::nonNull)
-                .toList());
+        response.setUserId(userId);
 
-        // Check dynamic rules
-        recommendations.addAll(dynamicRuleService.getAllRules().stream()
-                .filter(rule -> dynamicRuleService.checkRuleForUser(rule, userId, productRepository))
-                .map(rule -> new ProductRecommendation(
-                        rule.getProductName(),
-                        rule.getProductId(),
-                        rule.getProductText()
-                ))
-                .toList());
+        List<RecommendationResponse.Recommendation> recommendations = rules.stream()
+                .map(rule -> rule.apply(userId))
+                .flatMap(Optional::stream)
+                .collect(Collectors.toList());
 
-        return new RecommendationDTO(userId.toString(), recommendations);
+        response.setRecommendations(recommendations);
+        return response;
     }
 }

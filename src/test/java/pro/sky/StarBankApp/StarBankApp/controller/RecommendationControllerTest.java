@@ -1,79 +1,80 @@
 package pro.sky.StarBankApp.StarBankApp.controller;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.ResponseEntity;
-import pro.sky.StarBankApp.StarBankApp.model.ProductRecommendation;
-import pro.sky.StarBankApp.StarBankApp.model.RecommendationDTO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
 import pro.sky.StarBankApp.StarBankApp.service.RecommendationService;
 
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(RecommendationController.class)
 class RecommendationControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
 
-    @Mock
+    @MockitoBean
     private RecommendationService recommendationService;
 
-    @InjectMocks
-    private RecommendationController recommendationController;
-
     @Test
-    void getRecommendations_shouldReturnOkStatus() {
-        // Given
+    void whenValidUserId_thenReturnsRecommendations() throws Exception {
+        //given
         UUID userId = UUID.randomUUID();
-        String productId = "productId";
-        UUID descriptionId = UUID.randomUUID();
-        String text = "text";
-        ProductRecommendation recommendation = new ProductRecommendation(productId, descriptionId, text);
-        RecommendationDTO expectedDTO = new RecommendationDTO(userId.toString(), List.of(recommendation));
+        RecommendationResponse response = new RecommendationResponse();
+        response.setUserId(userId.toString());
+        response.setRecommendations(List.of(
+                new RecommendationResponse.Recommendation(
+                        "Try product X",
+                        "testId",
+                        "testText")
+        ));
 
-        when(recommendationService.getRecommendations(userId)).thenReturn(expectedDTO);
+        when(recommendationService.getRecommendations(userId.toString()))
+                .thenReturn(response);
 
-        // When
-        ResponseEntity<RecommendationDTO> response = recommendationController.getRecommendations(userId);
-
-        // Then
-        assertEquals(200, response.getStatusCodeValue());
+        //when and then
+        mockMvc.perform(get("/recommendation/{user_id}", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(userId.toString()))
+                .andExpect(jsonPath("$.recommendations[0].name").value("Try product X"))
+                .andExpect(jsonPath("$.recommendations[0].id").value("testId"))
+                .andExpect(jsonPath("$.recommendations[0].text").value("testText"));
     }
 
     @Test
-    void getRecommendations_shouldReturnCorrectBody() {
-        // Given
+    void whenNoRecommendations_thenReturnEmptyList() throws Exception {
+        //given
         UUID userId = UUID.randomUUID();
-        String productId = "productId";
-        UUID descriptionId = UUID.randomUUID();
-        String text = "text";
-        ProductRecommendation recommendation = new ProductRecommendation(productId, descriptionId, text);
-        RecommendationDTO expectedDTO = new RecommendationDTO(userId.toString(), List.of(recommendation));
+        RecommendationResponse emptyResponse = new RecommendationResponse();
+        emptyResponse.setUserId(userId.toString());
+        emptyResponse.setRecommendations(List.of());
 
-        when(recommendationService.getRecommendations(userId)).thenReturn(expectedDTO);
+        when(recommendationService.getRecommendations(userId.toString()))
+                .thenReturn(emptyResponse);
 
-        // When
-        ResponseEntity<RecommendationDTO> response = recommendationController.getRecommendations(userId);
-
-        // Then
-        assertEquals(expectedDTO, response.getBody());
+        //when and then
+        mockMvc.perform(get("/recommendation/{user_id}", userId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(userId.toString()))
+                .andExpect(jsonPath("$.recommendations").isEmpty());
     }
 
     @Test
-    void getRecommendations_shouldCallServiceOnce() {
-        // Given
-        UUID userId = UUID.randomUUID();
-        when(recommendationService.getRecommendations(userId))
-                .thenReturn(new RecommendationDTO(userId.toString(), List.of()));
+    void whenInvalidUserId_thenReturnsBadRequest() throws Exception {
+        //given
+        String invalidUserId = "not-a-UUID";
 
-        // When
-        recommendationController.getRecommendations(userId);
-
-        // Then
-        verify(recommendationService, times(1)).getRecommendations(userId);
+        //when and then
+        mockMvc.perform(get("/recommendation/{user_id}", invalidUserId))
+                .andExpect(status().isBadRequest());
     }
+
 }
