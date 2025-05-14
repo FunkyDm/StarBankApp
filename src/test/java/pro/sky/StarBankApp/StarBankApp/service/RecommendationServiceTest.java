@@ -2,106 +2,90 @@ package pro.sky.StarBankApp.StarBankApp.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import pro.sky.StarBankApp.StarBankApp.RecommendationRule;
-import pro.sky.StarBankApp.StarBankApp.model.ProductRecommendation;
-import pro.sky.StarBankApp.StarBankApp.model.RecommendationDTO;
-import pro.sky.StarBankApp.StarBankApp.repository.ProductRepository;
+import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
+import pro.sky.StarBankApp.StarBankApp.rules.RecommendationRuleSet;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RecommendationServiceTest {
-
     @Mock
-    private ProductRepository productRepository;
-
-    @Mock
-    private List<RecommendationRule> rules;
-
-    @InjectMocks
-    private RecommendationService recommendationService;
+    private RecommendationRuleSet rule1, rule2;
 
     @Test
-    void getRecommendations_shouldReturnCorrectUserId() {
-        // Given
-        UUID userId = UUID.randomUUID();
-        when(rules.stream()).thenReturn(Stream.empty());
+    void whenOneRuleApplies_thenRecommendationIsReturned() {
+        //given
+        String userId = "testUser";
+        RecommendationResponse.Recommendation recommendation =
+                new RecommendationResponse.Recommendation("Try Product X!",
+                        "testId",
+                        "testText");
 
-        // When
-        RecommendationDTO result = recommendationService.getRecommendations(userId);
+        when(rule1.apply(userId)).thenReturn(Optional.of(recommendation));
+        when(rule2.apply(userId)).thenReturn(Optional.empty());
 
-        // Then
-        assertEquals(userId.toString(), result.userId());
+        RecommendationService service = new RecommendationService(List.of(rule1, rule2));
+
+        //when
+        RecommendationResponse response = service.getRecommendations(userId);
+
+        //then
+        assertEquals(userId, response.getUserId());
+        assertEquals(1, response.getRecommendations().size());
+        assertEquals(recommendation, response.getRecommendations().get(0));
     }
 
     @Test
-    void getRecommendations_shouldIncludeAllNonNullRecommendations() {
-        // Given
-        UUID userId = UUID.randomUUID();
-        String productId1 = "productId1";
-        UUID descriptionId1 = UUID.randomUUID();
-        String text1 = "text1";
-        String productId2 = "productId2";
-        UUID descriptionId2 = UUID.randomUUID();
-        String text2 = "text2";
+    void whenNoRulesApply_thenEmptyListIsReturned(){
+        //given
+        String userId = "testId";
+        when(rule1.apply(userId)).thenReturn(Optional.empty());
+        when(rule2.apply(userId)).thenReturn(Optional.empty());
 
-        ProductRecommendation recommendation1 = new ProductRecommendation(productId1, descriptionId1, text1);
-        ProductRecommendation recommendation2 = new ProductRecommendation(productId2, descriptionId2, text2);
+        RecommendationService service = new RecommendationService(List.of(rule1, rule2));
 
-        RecommendationRule rule1 = mock(RecommendationRule.class);
-        RecommendationRule rule2 = mock(RecommendationRule.class);
-        RecommendationRule rule3 = mock(RecommendationRule.class);
+        //when
+        RecommendationResponse response = service.getRecommendations(userId);
 
-        when(rules.stream()).thenReturn(Stream.of(rule1, rule2, rule3));
-        when(rule1.check(userId)).thenReturn(recommendation1);
-        when(rule2.check(userId)).thenReturn(null);
-        when(rule3.check(userId)).thenReturn(recommendation2);
-
-        // When
-        RecommendationDTO result = recommendationService.getRecommendations(userId);
-
-        // Then
-        assertEquals(2, result.recommendations().size());
-        assertTrue(result.recommendations().contains(recommendation1));
-        assertTrue(result.recommendations().contains(recommendation2));
+        //then
+        assertEquals(userId, response.getUserId());
+        assertTrue(response.getRecommendations().isEmpty());
     }
 
     @Test
-    void getRecommendations_shouldReturnEmptyListWhenNoRules() {
-        // Given
-        UUID userId = UUID.randomUUID();
-        when(rules.stream()).thenReturn(Stream.empty());
+    void whenMultipleRulesApply_thenAllRecommendationsAreReturned(){
+        //given
+        String userId = "testId";
+        RecommendationResponse.Recommendation rec1 =
+                new RecommendationResponse.Recommendation(
+                        "Try product X",
+                        "testIdX",
+                        "testTextX"
+                );
+        RecommendationResponse.Recommendation rec2 =
+                new RecommendationResponse.Recommendation(
+                        "Try product Y",
+                        "testIdY",
+                        "testTextY"
+                );
 
-        // When
-        RecommendationDTO result = recommendationService.getRecommendations(userId);
+        when(rule1.apply(userId)).thenReturn(Optional.of(rec1));
+        when(rule2.apply(userId)).thenReturn(Optional.of(rec2));
 
-        // Then
-        assertTrue(result.recommendations().isEmpty());
-    }
+        RecommendationService service = new RecommendationService(List.of(rule1, rule2));
 
-    @Test
-    void getRecommendations_shouldReturnEmptyListWhenAllRulesReturnNull() {
-        // Given
-        UUID userId = UUID.randomUUID();
-        RecommendationRule rule1 = mock(RecommendationRule.class);
-        RecommendationRule rule2 = mock(RecommendationRule.class);
+        //when
+        RecommendationResponse response = service.getRecommendations(userId);
 
-        when(rules.stream()).thenReturn(Stream.of(rule1, rule2));
-        when(rule1.check(userId)).thenReturn(null);
-        when(rule2.check(userId)).thenReturn(null);
-
-        // When
-        RecommendationDTO result = recommendationService.getRecommendations(userId);
-
-        // Then
-        assertTrue(result.recommendations().isEmpty());
+        //then
+        assertEquals(userId, response.getUserId());
+        assertEquals(2, response.getRecommendations().size());
+        assertTrue(response.getRecommendations().containsAll(List.of(rec1, rec2)));
     }
 }

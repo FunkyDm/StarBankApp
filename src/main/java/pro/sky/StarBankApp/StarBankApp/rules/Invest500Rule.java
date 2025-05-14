@@ -1,32 +1,34 @@
 package pro.sky.StarBankApp.StarBankApp.rules;
 
 import org.springframework.stereotype.Component;
-import pro.sky.StarBankApp.StarBankApp.RecommendationRule;
-import pro.sky.StarBankApp.StarBankApp.model.ProductRecommendation;
-import pro.sky.StarBankApp.StarBankApp.repository.ProductRepository;
+import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
+import pro.sky.StarBankApp.StarBankApp.repository.TransactionRepository;
 
-import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.Optional;
 
 @Component
-public class Invest500Rule implements RecommendationRule {
-    private final ProductRepository productRepository;
-    private static final UUID PRODUCT_ID = UUID.fromString("147f6a0f-3b91-413b-ab99-87f081d60d5a");
+public class Invest500Rule implements RecommendationRuleSet {
+    private final TransactionRepository transactionRepository;
 
-    public Invest500Rule(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public Invest500Rule(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
-    public ProductRecommendation check(UUID userId) {
+    public Optional<RecommendationResponse.Recommendation> apply(String userId) {
+        boolean usesDebit = transactionRepository.usesProductType(userId, "DEBIT");
+        boolean usesInvest = transactionRepository.usesProductType(userId, "INVEST");
+        double savingDeposits = transactionRepository.getTotalDepositByType(userId, "SAVING");
 
-        boolean usesDebit = productRepository.isUserUsingProductType(userId, "DEBIT");
-        boolean usesInvest = productRepository.isUserUsingProductType(userId, "INVEST");
-        BigDecimal savingDeposits = productRepository.getTotalDepositsByProductType(userId, "SAVING");
-
-        if (usesDebit && !usesInvest && savingDeposits.compareTo(new BigDecimal("1000")) > 0) {
-            return productRepository.findProductById(PRODUCT_ID);
+        if (usesDebit && !usesInvest && savingDeposits > 1000) {
+            return Optional.of(new RecommendationResponse.Recommendation(
+                    "Invest 500",
+                    "147f6a0f-3b91-413b-ab99-87f081d60d5a",
+                    "Откройте свой путь к успеху с индивидуальным инвестиционным счетом (ИИС) от нашего банка!"
+            ));
         }
-        return null;
+
+        return Optional.empty();
     }
+
 }

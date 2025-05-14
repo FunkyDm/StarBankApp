@@ -1,36 +1,37 @@
 package pro.sky.StarBankApp.StarBankApp.rules;
 
 import org.springframework.stereotype.Component;
-import pro.sky.StarBankApp.StarBankApp.RecommendationRule;
-import pro.sky.StarBankApp.StarBankApp.model.ProductRecommendation;
-import pro.sky.StarBankApp.StarBankApp.repository.ProductRepository;
+import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
+import pro.sky.StarBankApp.StarBankApp.repository.TransactionRepository;
 
-import java.math.BigDecimal;
-import java.util.UUID;
+import java.util.Optional;
 
 @Component
-public class TopSavingRule implements RecommendationRule {
-    private final ProductRepository productRepository;
-    private static final UUID PRODUCT_ID = UUID.fromString("59efc529-2fff-41af-baff-90ccd7402925");
+public class TopSavingRule implements RecommendationRuleSet {
+    private final TransactionRepository transactionRepository;
 
-    public TopSavingRule(ProductRepository productRepository) {
-        this.productRepository = productRepository;
+    public TopSavingRule(TransactionRepository transactionRepository) {
+        this.transactionRepository = transactionRepository;
     }
 
     @Override
-    public ProductRecommendation check(UUID userId) {
-        boolean usesDebit = productRepository.isUserUsingProductType(userId, "DEBIT");
-        BigDecimal debitDeposits = productRepository.getTotalDepositsByProductType(userId, "DEBIT");
-        BigDecimal savingDeposits = productRepository.getTotalDepositsByProductType(userId, "SAVING");
-        BigDecimal debitSpends = productRepository.getTotalSpendsByProductType(userId, "DEBIT");
+    public Optional<RecommendationResponse.Recommendation> apply(String userId) {
+        boolean usesDebit = transactionRepository.usesProductType(userId, "DEBIT");
+        double debitDeposits = transactionRepository.getTotalDepositByType(userId, "DEBIT");
+        double savingDeposits = transactionRepository.getTotalDepositByType(userId, "SAVING");
+        double debitSpends = transactionRepository.getTotalSpendByType(userId, "DEBIT");
 
-        boolean condition1 = debitDeposits.compareTo(new BigDecimal("50000")) >= 0 ||
-                savingDeposits.compareTo(new BigDecimal("50000")) >= 0;
-        boolean condition2 = debitDeposits.compareTo(debitSpends) > 0;
-
-        if (usesDebit && condition1 && condition2) {
-            return productRepository.findProductById(PRODUCT_ID);
+        if (usesDebit &&
+                (debitDeposits >= 50000 || savingDeposits >= 50000) &&
+                debitDeposits > debitSpends) {
+            return Optional.of(new RecommendationResponse.Recommendation(
+                    "Top Saving",
+                    "59efc529-2fff-41af-baff-90ccd7402925",
+                    "Откройте свою собственную «Копилку» с нашим банком!"
+            ));
         }
-        return null;
+
+        return Optional.empty();
     }
+
 }
