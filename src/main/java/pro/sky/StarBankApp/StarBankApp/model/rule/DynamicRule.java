@@ -29,7 +29,6 @@ public class DynamicRule {
 
     @OneToMany(mappedBy = "dynamicRule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Query> rule;
-
 }
 
 
