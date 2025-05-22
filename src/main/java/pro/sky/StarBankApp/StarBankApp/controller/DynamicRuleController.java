@@ -15,7 +15,6 @@ import java.util.UUID;
 @RequestMapping("/rule")
 @AllArgsConstructor
 public class DynamicRuleController {
-//    private final RuleStatService ruleStatService;
     private final RuleService ruleService;
 
     @PostMapping
@@ -35,13 +34,5 @@ public class DynamicRuleController {
         List<DynamicRuleDTO> rules = ruleService.getAllRules();
         return ResponseEntity.ok(Map.of("data", rules));
     }
-
-//    @GetMapping("/stats")
-//    public ResponseEntity<Map<String, List<RuleStatDTO>>> getStats() {
-//        List<RuleStatDTO> stats = ruleStatService.getAllStats();
-//        Map<String, List<RuleStatDTO>> response = new HashMap<>();
-//        response.put("stats", stats);
-//        return ResponseEntity.ok(response);
-//    }
 
 }
