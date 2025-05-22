@@ -1,9 +1,10 @@
 package pro.sky.StarBankApp.StarBankApp.rules;
 
-import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
+import pro.sky.StarBankApp.StarBankApp.dto.Recommendation;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface RecommendationRuleSet {
-    Optional<RecommendationResponse.Recommendation> apply(String userId);
+    Optional<Recommendation> getRecommendation(UUID userId);
 }

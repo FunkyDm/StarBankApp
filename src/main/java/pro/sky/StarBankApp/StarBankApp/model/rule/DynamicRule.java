@@ -2,7 +2,6 @@ package pro.sky.StarBankApp.StarBankApp.model.rule;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.github.spind30.starbankapp.model.queries.Query;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pro.sky.StarBankApp.StarBankApp.dto.DynamicRuleDTO;
+import pro.sky.StarBankApp.StarBankApp.dto.Recommendation;
+import pro.sky.StarBankApp.StarBankApp.repository.RuleRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;

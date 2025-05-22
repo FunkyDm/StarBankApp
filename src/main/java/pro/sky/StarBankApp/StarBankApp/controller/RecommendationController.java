@@ -3,7 +3,7 @@ package pro.sky.StarBankApp.StarBankApp.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
+import pro.sky.StarBankApp.StarBankApp.dto.Recommendation;
 
 import java.util.UUID;
 
@@ -16,7 +16,7 @@ public class RecommendationController {
     }
 
     @GetMapping("/recommendation/{user_id}")
-    public RecommendationResponse getRecommendations(@PathVariable("user_id")UUID userId){
+    public Recommendation getRecommendations(@PathVariable("user_id")UUID userId){
         return recommendationService.getRecommendations(userId.toString());
     }
 }
