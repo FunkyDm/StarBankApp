@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Repository
-public interface RuleRepository extends JpaRepository<DynamicRule, Long> {
+public interface RuleRepository extends JpaRepository<DynamicRule, UUID> {
     Cache<String, Integer> ruleTriggerCountCache = Caffeine.newBuilder()
             .expireAfterWrite(1, TimeUnit.HOURS)
             .maximumSize(100)
