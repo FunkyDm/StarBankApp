@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
-import pro.sky.StarBankApp.StarBankApp.service.RecommendationService;
 
 import java.util.UUID;
 

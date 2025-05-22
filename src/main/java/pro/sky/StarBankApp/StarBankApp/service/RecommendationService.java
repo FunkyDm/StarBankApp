@@ -1,32 +1,51 @@
 package pro.sky.StarBankApp.StarBankApp.service;
 
-import org.springframework.stereotype.Service;
-import pro.sky.StarBankApp.StarBankApp.dto.RecommendationResponse;
-import pro.sky.StarBankApp.StarBankApp.rules.RecommendationRuleSet;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class RecommendationService {
-    private final List<RecommendationRuleSet> rules;
 
-    public RecommendationService(List<RecommendationRuleSet> rules) {
-        this.rules = rules;
+    private final RuleRepository ruleRepository;
+
+
+    @Transactional
+    public List<Recommendation> getRecommendations(UUID userId) {
+
+        List<DynamicRuleDTO> rules = ruleRepository.findAll()
+                .stream()
+                .map(DynamicRuleDTO::fromEntity)
+                .toList();
+
+        return rules.stream()
+                .filter(ruleDTO -> process(ruleDTO, userId))
+                .map(this::toRecommendation)
+                .collect(Collectors.toList());
     }
 
-    public RecommendationResponse getRecommendations(String userId) {
-        RecommendationResponse response = new RecommendationResponse();
 
-        response.setUserId(userId);
+    public boolean process(DynamicRuleDTO ruleDTO, UUID userId) {
+        return ruleDTO.getRule().stream()
+                .map(queryDTO -> {
+                    // Здесь вам нужно создать AbstractQuery и выполнить проверку на основании QueryDTO
+                    AbstractQuery abstractQuery = QueryFactory.from(QueryType.valueOf(queryDTO.getQuery()), queryDTO.getArguments(), queryDTO.isNegate());
+                    return abstractQuery.perform(userId, queryDTO.getArguments());
+                })
+                .reduce((a, b) -> a && b)
+                .orElse(false);
+    }
 
-        List<RecommendationResponse.Recommendation> recommendations = rules.stream()
-                .map(rule -> rule.apply(userId))
-                .flatMap(Optional::stream)
-                .collect(Collectors.toList());
 
-        response.setRecommendations(recommendations);
-        return response;
+    public Recommendation toRecommendation(DynamicRuleDTO ruleDTO) {
+        return new Recommendation(ruleDTO.getProductName(), ruleDTO.getProductId(), ruleDTO.getProductText());
     }
 }
+

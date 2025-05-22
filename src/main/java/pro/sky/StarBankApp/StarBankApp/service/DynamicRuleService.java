@@ -2,12 +2,9 @@ package pro.sky.StarBankApp.StarBankApp.service;
 
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
-import pro.sky.StarBankApp.StarBankApp.model.DynamicRule;
 import pro.sky.StarBankApp.StarBankApp.repository.dinamicRules.DynamicRuleRepository;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 @Profile("!disabledModule")
 @Service
