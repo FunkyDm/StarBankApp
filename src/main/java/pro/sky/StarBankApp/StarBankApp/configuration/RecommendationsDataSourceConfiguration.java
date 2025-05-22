@@ -31,11 +31,10 @@ public class RecommendationsDataSourceConfiguration {
         return new JdbcTemplate(dataSource);
     }
 
-//    @Primary
-//    @Bean(name = "dynamicRulesDataSource")
-//    public DataSource dynamicRulesDataSource(DataSourceProperties properties) {
-//        return properties.initializeDataSourceBuilder().build();
-
-//    }
+    @Primary
+    @Bean(name = "dynamicRulesDataSource")
+    public DataSource dynamicRulesDataSource(DataSourceProperties properties) {
+        return properties.initializeDataSourceBuilder().build();
+    }
 
 }
