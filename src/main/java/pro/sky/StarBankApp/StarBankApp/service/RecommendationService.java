@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pro.sky.StarBankApp.StarBankApp.dto.DynamicRuleDTO;
 import pro.sky.StarBankApp.StarBankApp.dto.Recommendation;
+import pro.sky.StarBankApp.StarBankApp.model.enums.QueryType;
+import pro.sky.StarBankApp.StarBankApp.query.AbstractQuery;
+import pro.sky.StarBankApp.StarBankApp.query.QueryFactory;
 import pro.sky.StarBankApp.StarBankApp.repository.RuleRepository;
 
 import java.util.*;

@@ -42,5 +42,4 @@ public class DynamicRuleDTO {
         return dynamicRule;
     }
 
-
 }

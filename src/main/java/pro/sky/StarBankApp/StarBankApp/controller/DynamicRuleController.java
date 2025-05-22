@@ -12,23 +12,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/rule")
 public class DynamicRuleController {
-//    private final DynamicRuleService ruleService;
-//
-//    public DynamicRuleController(DynamicRuleService ruleService) {
-//        this.ruleService = ruleService;
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<DynamicRule> createRule(@RequestBody DynamicRule rule) {
-//        return ResponseEntity.ok(ruleService.createRule(rule));
-//    }
-//
-//    @GetMapping
-//    public ResponseEntity<Map<String, List<DynamicRule>>> getAllRules() {
-//        return ResponseEntity.ok(Map.of("data", ruleService.getAllRules()));
-//    }
-
-    private final RuleStatService ruleStatService;
+//    private final RuleStatService ruleStatService;
     private final RuleService ruleService;
 
     @PostMapping
@@ -49,12 +33,12 @@ public class DynamicRuleController {
         return ResponseEntity.ok(Map.of("data", rules));
     }
 
-    @GetMapping("/stats")
-    public ResponseEntity<Map<String, List<RuleStatDTO>>> getStats() {
-        List<RuleStatDTO> stats = ruleStatService.getAllStats();
-        Map<String, List<RuleStatDTO>> response = new HashMap<>();
-        response.put("stats", stats);
-        return ResponseEntity.ok(response);
-    }
+//    @GetMapping("/stats")
+//    public ResponseEntity<Map<String, List<RuleStatDTO>>> getStats() {
+//        List<RuleStatDTO> stats = ruleStatService.getAllStats();
+//        Map<String, List<RuleStatDTO>> response = new HashMap<>();
+//        response.put("stats", stats);
+//        return ResponseEntity.ok(response);
+//    }
 
 }
