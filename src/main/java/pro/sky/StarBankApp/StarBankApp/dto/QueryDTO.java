@@ -3,6 +3,7 @@ package pro.sky.StarBankApp.StarBankApp.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import pro.sky.StarBankApp.StarBankApp.model.enums.QueryType;
 import pro.sky.StarBankApp.StarBankApp.model.queries.Query;
 
 import java.util.List;
