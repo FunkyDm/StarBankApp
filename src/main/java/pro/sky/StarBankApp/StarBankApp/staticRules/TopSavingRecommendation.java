@@ -1,10 +1,9 @@
-package pro.sky.StarBankApp.StarBankApp.rules;
+package pro.sky.StarBankApp.StarBankApp.staticRules;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import pro.sky.StarBankApp.StarBankApp.dto.Recommendation;
 import pro.sky.StarBankApp.StarBankApp.repository.RecommendationsRepository;
-import pro.sky.StarBankApp.StarBankApp.repository.TransactionRepository;
 
 import java.util.Optional;
 import java.util.UUID;
