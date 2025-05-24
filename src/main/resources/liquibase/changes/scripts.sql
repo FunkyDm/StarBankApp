@@ -1,12 +1,12 @@
 -- liquibase formatted sql
 
+-- changeset Artem:1
 CREATE TABLE IF NOT EXISTS dynamic_rules (
     product_id UUID NOT NULL,
     product_name VARCHAR(255),
     product_text VARCHAR(255),
     CONSTRAINT dynamic_rules_pkey PRIMARY KEY (product_id)
 );
-
 
 CREATE INDEX IF NOT EXISTS idx_dynamic_rules_product_name ON dynamic_rules (product_name);
 
@@ -27,6 +27,8 @@ CREATE TABLE IF NOT EXISTS public.queries
     'ACTIVE_USER_OF'::character varying, 'TRANSACTION_SUM_COMPARE'::character varying,
     'TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW'::character varying]::text[]))
 );
+
+-- changeset Dm:2
 
 CREATE INDEX IF NOT EXISTS idx_queries_dynamic_rule_id ON public.queries (dynamic_rule_id);
 
