@@ -1,4 +1,4 @@
-package pro.sky.StarBankApp.StarBankApp.rules;
+package pro.sky.StarBankApp.StarBankApp.staticRules;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

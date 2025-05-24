@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset Artem:1
+-- changeset Dm:2
 
 CREATE TABLE IF NOT EXISTS dynamic_rules (
     product_id UUID NOT NULL,
@@ -28,4 +28,11 @@ CREATE TABLE IF NOT EXISTS public.queries
     (query_type::text = ANY (ARRAY['USER_OF'::character varying,
     'ACTIVE_USER_OF'::character varying, 'TRANSACTION_SUM_COMPARE'::character varying,
     'TRANSACTION_SUM_COMPARE_DEPOSIT_WITHDRAW'::character varying]::text[]))
+);
+
+CREATE INDEX IF NOT EXISTS idx_queries_dynamic_rule_id ON public.queries (dynamic_rule_id);
+
+CREATE TABLE IF NOT EXISTS rule_stat (
+    rule_id UUID PRIMARY KEY,
+    count INT DEFAULT 0
 );
