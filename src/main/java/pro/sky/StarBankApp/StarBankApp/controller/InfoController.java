@@ -1,0 +1,27 @@
+package pro.sky.StarBankApp.StarBankApp.controller;
+
+import org.springframework.boot.info.BuildProperties;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Map;
+
+@Controller
+@RequestMapping("/management")
+public class InfoController {
+
+    private final BuildProperties build;
+
+    public InfoController(BuildProperties build) {
+        this.build = build;
+    }
+
+    @GetMapping("/info")
+    public Map<String, String> info() {
+        return Map.of(
+                "name", build.getName(),
+                "version", build.getVersion()
+        );
+    }
+}
