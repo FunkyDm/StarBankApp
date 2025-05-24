@@ -1,5 +1,6 @@
 package pro.sky.StarBankApp.StarBankApp.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +25,7 @@ public class RuleStatService {
     @Transactional
     public void incrementStat(UUID ruleId) {
         RuleStat ruleStat = ruleStatRepository.findByRuleId(ruleId)
-                .orElseGet(() -> new RuleStat(ruleId));
+                .orElseGet(() -> new RuleStat (ruleId));
         ruleStat.incrementCount();
         ruleStatRepository.save(ruleStat);
     }
@@ -36,11 +37,12 @@ public class RuleStatService {
                 .collect(Collectors.toList());
     }
 
+
     @Transactional
     public void resetAllStats() {
         List<RuleStat> stats = ruleStatRepository.findAll();
         stats.forEach(RuleStat::resetCount);
         ruleStatRepository.saveAll(stats);
     }
-
 }
+

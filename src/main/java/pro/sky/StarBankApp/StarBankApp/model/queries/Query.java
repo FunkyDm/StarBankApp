@@ -2,16 +2,7 @@ package pro.sky.StarBankApp.StarBankApp.model.queries;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.*;
 import lombok.*;
 import pro.sky.StarBankApp.StarBankApp.model.enums.QueryType;
 import pro.sky.StarBankApp.StarBankApp.model.rule.DynamicRule;
