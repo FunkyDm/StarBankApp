@@ -1,7 +1,5 @@
 -- liquibase formatted sql
 
--- changeset Dm:2
-
 CREATE TABLE IF NOT EXISTS dynamic_rules (
     product_id UUID NOT NULL,
     product_name VARCHAR(255),
