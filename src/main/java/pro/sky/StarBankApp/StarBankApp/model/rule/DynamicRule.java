@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import lombok.*;
 import pro.sky.StarBankApp.StarBankApp.model.queries.Query;
 
+
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ public class DynamicRule {
 
     @OneToMany(mappedBy = "dynamicRule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Query> rule;
+
 }
 
 

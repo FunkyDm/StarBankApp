@@ -78,4 +78,6 @@ public class RecommendationsRepository {
             transactionAmountCache.put(cacheKey, result);
         }
         return result != null ? result : 0L;
-    }
+    } 
+
+}
