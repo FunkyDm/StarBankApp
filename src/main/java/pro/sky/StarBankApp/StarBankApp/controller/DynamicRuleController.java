@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pro.sky.StarBankApp.StarBankApp.dto.DynamicRuleDTO;
+import pro.sky.StarBankApp.StarBankApp.dto.RuleStatDTO;
 import pro.sky.StarBankApp.StarBankApp.service.RuleService;
+import pro.sky.StarBankApp.StarBankApp.service.RuleStatService;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @RequestMapping("/rule")
 @AllArgsConstructor
 public class DynamicRuleController {
+    private final RuleStatService ruleStatService;
     private final RuleService ruleService;
 
     @PostMapping
@@ -33,6 +36,14 @@ public class DynamicRuleController {
     public ResponseEntity<Map<String, List<DynamicRuleDTO>>> getAllRules() {
         List<DynamicRuleDTO> rules = ruleService.getAllRules();
         return ResponseEntity.ok(Map.of("data", rules));
+    }
+
+    @GetMapping("/stats")
+    public ResponseEntity<Map<String, List<RuleStatDTO>>> getStats() {
+        List<RuleStatDTO> stats = ruleStatService.getAllStats();
+        Map<String, List<RuleStatDTO>> response = new HashMap<>();
+        response.put("stats", stats);
+        return ResponseEntity.ok(response);
     }
 
 }
