@@ -79,3 +79,5 @@ public class RecommendationsRepository {
         }
         return result != null ? result : 0L;
     }
+
+}
