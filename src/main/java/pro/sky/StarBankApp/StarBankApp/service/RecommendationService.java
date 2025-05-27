@@ -53,5 +53,6 @@ public class RecommendationService {
     public Recommendation toRecommendation(DynamicRuleDTO ruleDTO) {
         return new Recommendation(ruleDTO.getProductName(), ruleDTO.getProductId(), ruleDTO.getProductText());
     }
+
 }
 
