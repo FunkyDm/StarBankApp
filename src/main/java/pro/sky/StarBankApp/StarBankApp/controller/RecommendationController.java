@@ -22,5 +22,4 @@ public class RecommendationController {
     public ResponseEntity<List<Recommendation>> getRecommendations(@PathVariable UUID userId) {
         return ResponseEntity.ok(recommendationService.getRecommendations(userId));
     }
-
 }
