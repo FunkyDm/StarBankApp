@@ -15,6 +15,7 @@ import pro.sky.StarBankApp.StarBankApp.staticRules.StaticRuleProcessor;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,19 @@ public class RecommendationService {
 
     @Transactional
     public List<Recommendation> getRecommendations(UUID userId) {
+        List<Recommendation> dynamicRecommendations = getDynamicRecommendations(userId);
+        List<Recommendation> staticRecommendations = staticRuleProcessor.processStaticRules(userId);
 
+        //Объединяем рекомендации, избегая дубликатов
+        return Stream.concat(
+                dynamicRecommendations.stream(),
+                staticRecommendations.stream()
+        )
+                .distinct()
+                .collect(Collectors.toList());
+    }
+
+    private List<Recommendation> getDynamicRecommendations(UUID userId){
         List<DynamicRuleDTO> rules = ruleRepository.findAll()
                 .stream()
                 .map(DynamicRuleDTO::fromEntity)
@@ -36,8 +49,6 @@ public class RecommendationService {
                 .map(this::toRecommendation)
                 .collect(Collectors.toList());
     }
-
-    private List<Recommendation> getDynamic
 
     public boolean process(DynamicRuleDTO ruleDTO, UUID userId) {
         return ruleDTO.getRule().stream()
