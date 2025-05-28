@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 public class RecommendationService {
     private final StaticRuleProcessor staticRuleProcessor;
     private final RuleRepository ruleRepository;
+    private final RuleStatService ruleStatService;
 
     @Transactional
     public List<Recommendation> getRecommendations(UUID userId) {
@@ -45,7 +46,13 @@ public class RecommendationService {
                 .toList();
 
         return rules.stream()
-                .filter(ruleDTO -> process(ruleDTO, userId))
+                .filter(ruleDTO -> {
+                    boolean isMatch = process(ruleDTO, userId);
+                    if (isMatch) {
+                        ruleStatService.incrementStat(ruleDTO.getProductId()); // Обновляем статистику
+                    }
+                    return isMatch;
+                })
                 .map(this::toRecommendation)
                 .collect(Collectors.toList());
     }
@@ -63,7 +70,6 @@ public class RecommendationService {
                 .reduce((a, b) -> a && b)
                 .orElse(false);
     }
-
 
     public Recommendation toRecommendation(DynamicRuleDTO ruleDTO) {
         return new Recommendation(
